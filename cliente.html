@@ -71,14 +71,34 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+      <button type="submit" class="btn btn-primary" onclick="altaCliente()">Guardar Cliente</button>
     </form>
   </div>
-
 
   <footer class="bg-dark text-light text-center py-3 fixed-bottom">
     <p>&copy; 2023 Carga de Clientes</p>
   </footer>
+
+  <script>
+    async function altaCliente(){
+      const idCliente = document.getElementById('idCliente').value;
+      const nombreFantasia = document.getElementById('nombreFantasia').value;
+      const nombre = document.getElementById('nombre').value;
+      const apellido = document.getElementById('apellido').value;
+      const email = document.getElementById('email').value;
+      const whatsapp = document.getElementById('whatsapp').value;
+      const direccion = document.getElementById('direccion').value;
+      const fechaAlta = document.getElementById('fechaAlta').value;
+      const cuit = document.getElementById('cuit').value;
+      const diasHorarios = document.getElementById('diasHorarios').value;
+      try {
+        const respuesta = await axios.post('cluster0.vhunetu.mongodb.net/clients', { idCliente: idCliente, nombreFantasia: nombreFantasia, nombre: nombre, apellido: apellido, email: email, whatsapp: whatsapp, direccion: direccion, fechaAlta: fechaAlta, cuit: cuit, diasHorarios: diasHorarios});
+        const nuevoCliente = respuesta.data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  </script>
 
 </body>
 </html>
