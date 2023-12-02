@@ -46,32 +46,51 @@
     </head>
 
     <body>
-        <header>
-            <h1 style="background-color: #333; color: white; padding: 10px; text-align: center;">Distribuidora</h1>
-        </header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">Distribuidora</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Nueva Venta</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
         <div class="container mt-4 clearfix">
             <div class="form-container">
                 <h4 class="mb-4">Seleccione producto y cantidad a agregar</h4>
-
-                <form>
-                    <div class="mb-3 form-group">
-                        <label style="margin-bottom: 12px;">Cliente*</label>
-                        <select class="form-select" required>
-                            <option value="" disabled selected>-- Seleccionar cliente --</option>
-                            <option value="producto1">Cliente 1</option>
-                            <option value="producto2">Cliente 2</option>
-                            <option value="producto3">Cliente 3</option>
-                            <option value="producto4">Cliente 4</option>
-                            <option value="producto5">Cliente 5</option>
-                        </select>
-                    </div>
-                </form>
                 
                 <form>
                     <div class="mb-3 form-group">
-                        <label style="margin-bottom: 12px;">Producto*</label><br>
-                        <select class="form-select" required>
+                        <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
+                        <select id="cliente" class="form-select" required>
+                            <option value="" disabled selected>-- Seleccionar cliente --</option>
+                            <option value="cliente1">Cliente 1</option>
+                            <option value="cliente2">Cliente 2</option>
+                            <option value="cliente3">Cliente 3</option>
+                            <option value="cliente4">Cliente 4</option>
+                            <option value="cliente5">Cliente 5</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="producto" style="margin-bottom: 12px;">Producto*</label><br>
+                        <select id="producto" class="form-select" required>
                             <option value="" disabled selected>-- Seleccionar producto --</option>
                             <option value="producto1">Producto 1</option>
                             <option value="producto2">Producto 2</option>
@@ -82,18 +101,18 @@
                     </div>
 
                     <div class="mb-3 form-group">
-                        <label style="margin-bottom: 12px;">Unidades*</label><br>
-                        <input type="number" class="form-control" placeholder="Ingrese la cantidad de unidades..." required>
+                        <label for="unidades" style="margin-bottom: 12px;">Unidades*</label><br>
+                        <input id="unidades" type="number" class="form-control" placeholder="Ingrese la cantidad de unidades..." required>
                     </div>
 
                     <div class="mb-3 form-group">
-                        <label style="margin-bottom: 12px;">Bonificación de fábrica*</label>
-                        <input type="number" class="form-control" placeholder="0" required>
+                        <label for="bonificacion" style="margin-bottom: 12px;">Bonificación de fábrica*</label>
+                        <input id="bonificacion" type="number" class="form-control" placeholder="0" required>
                     </div>
                     
 
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary" style="background-color: blue; color: white;">Agregar</button>
+                        <button type="button" id="btnAgregar" class="btn btn-primary" onclick="obtenerDatos()" style="background-color: blue; color: white;">Agregar</button>
                         <button type="button" class="btn btn-outline-dark" style="color:black;">Guardar</button>
                     </div>
                 </form>
@@ -116,13 +135,13 @@
             </div>
         </div>
 
-        <footer class="bg-dark text-light text-center py-3 fixed-bottom">
+        <footer class="bg-dark text-light text-center py-1 fixed-bottom">
             <p>&copy; UAA - Sistema de proveedores</p>
         </footer>
     
         <!-- Agrega Axios CDN -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="script.js"></script>
+        <script src="script_nuevas_ventas.js"></script>
     </body>
 </html>
