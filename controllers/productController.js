@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
-const { createProductValidation, updateProductValidation, deleteProductValidation } = require('../middleware/validationMiddleware');
-const Product = require('../models/productosModels');
+const { createProductValidation, updateProductValidation, deleteProductValidation } = require('../middlewares/validationMiddleware');
+const Product = require('../models/productModel');
 
 const getProduct = async (req, res) => {
     try {

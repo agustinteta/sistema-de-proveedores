@@ -1,9 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const clientRoutes = require('./routes/cliente');
-const productRoutes = require('./routes/producto');
+const path = require('path');
+const clientRoutes = require('./routes/clientRoute');
+const productRoutes = require('./routes/productRoute');
 const app = express();
 const port = 3000;
+
+// Configurar Express para servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuración de MongoDB
 mongoose.connect('mongodb+srv://admin:admin@cluster0.vhunetu.mongodb.net/Distribuidora', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -20,8 +24,12 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 // Rutas
-app.use('/clientes', clientRoutes);
-app.use('/productos', productRoutes);
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.use('/clients', clientRoutes);
+app.use('/products', productRoutes);
 
 // Eventos de conexión y error de MongoDB
 mongoose.connection.on('connected', () => {
@@ -34,5 +42,5 @@ mongoose.connection.on('error', (err) => {
 
 // Iniciar el servidor
 app.listen(port, () => {
-  console.log(`Server is running on port http://127.0.0.1:${port}`);
+  console.log(`Server is running on port http://127.0.0.1:${port}/`);
 });
