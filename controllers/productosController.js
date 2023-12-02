@@ -19,7 +19,7 @@ const getProduct = async (req, res) => {
 
 
 const createProduct = async (req, res) => {
-    await Promise.all(createProductValidation.map(validation => validation(req, res)));
+    //await Promise.all(createProductValidation.map(validation => validation(req, res)));
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +38,7 @@ const createProduct = async (req, res) => {
 
 
 const updateProduct = async (req, res) => {
-    await Promise.all(updateProductValidation.map(validation => validation(req, res)));
+    //await Promise.all(updateProductValidation.map(validation => validation(req, res)));
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -56,7 +56,7 @@ const updateProduct = async (req, res) => {
 
 
 const deleteProduct = async (req, res) => {
-    await Promise.all(deleteProductValidation.map(validation => validation(req, res)));
+    //await Promise.all(deleteProductValidation.map(validation => validation(req, res)));
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
