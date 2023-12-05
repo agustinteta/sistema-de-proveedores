@@ -27,6 +27,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+app.get('/productos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'product_list.html'));
+});
 
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);

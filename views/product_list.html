@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Listado de Productos</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Distribuidora</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Nueva Venta</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between">
+            <h2>Listado de Productos</h2>
+            <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
+                data-bs-target="#agregarProductoModal">
+                Agregar Producto
+            </button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Carga dinamica de los productos -->
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <!-- Modal para agregar producto -->
+    <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-labelledby="agregarProductoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para agregar producto -->
+                    <form id="agregarProductoForm">
+                        <div class="mb-3">
+                            <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombreProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionProducto" class="form-label">Descripción del Producto</label>
+                            <textarea class="form-control" id="descripcionProducto" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="precioProducto" class="form-label">Precio del Producto</label>
+                            <input type="number" class="form-control" id="precioProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stockProducto" class="form-label">Stock del Producto</label>
+                            <input type="number" class="form-control" id="stockProducto" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar producto -->
+    <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProductoModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para editar producto -->
+                    <form id="editarProductoForm">
+                        <div class="mb-3">
+                            <label for="editNombreProducto" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="editNombreProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescripcionProducto" class="form-label">Descripción del Producto</label>
+                            <textarea class="form-control" id="editDescripcionProducto" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPrecioProducto" class="form-label">Precio del Producto</label>
+                            <input type="number" class="form-control" id="editPrecioProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStockProducto" class="form-label">Stock del Producto</label>
+                            <input type="number" class="form-control" id="editStockProducto" required>
+                        </div>
+                        <input type="hidden" id="editIdProducto" name="editIdProducto">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="editarProducto()">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Agrega Axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        window.onload = cargarTabla();
+
+        // Funcion para cargar la tabla con los productos de la BDD
+        async function cargarTabla() {
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/products/');
+                const productos = response.data;
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                productos.forEach(producto => {
+                    const newRow = `
+                <tr>
+                    <td>${producto.name}</td>
+                    <td>${producto.description}</td>
+                    <td>${producto.price}</td>
+                    <td>${producto.stock}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="cargarDatosProductoParaEdicion('${producto._id}')" 
+                        data-bs-toggle="modal" data-bs-target="#editarProductoModal">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteProduct('${producto._id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+                    tbody.innerHTML += newRow;
+                });
+            } catch (error) {
+                console.error('Error al obtener la lista de productos:', error);
+                alert('Hubo un error al cargar la lista de productos. Por favor, inténtalo de nuevo más tarde.');
+            }
+        };
+
+        // Función para eliminar un producto
+        async function deleteProduct(id) {
+            try {
+                const response = await axios.delete(`http://127.0.0.1:3000/products/${id}`);
+
+                cargarTabla();
+            } catch (error) {
+                console.error('Error al eliminar el producto:', error);
+                alert('Hubo un error al eliminar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+        // Función para agregar un nuevo producto
+        async function agregarProducto() {
+            try {
+                // Obtener datos del formulario
+                const nombreProducto = document.getElementById('nombreProducto').value;
+                const descripcionProducto = document.getElementById('descripcionProducto').value;
+                const precioProducto = document.getElementById('precioProducto').value;
+                const stockProducto = document.getElementById('stockProducto').value;
+
+                // Validar que los campos no estén vacíos
+                if (!nombreProducto || !descripcionProducto || !precioProducto || !stockProducto) {
+                    alert('Por favor, complete todos los campos.');
+                    return;
+                }
+
+                const response = await axios.post('http://127.0.0.1:3000/products/', {
+                    name: nombreProducto,
+                    description: descripcionProducto,
+                    price: precioProducto,
+                    stock: stockProducto
+                });
+
+                cargarTabla();
+
+                $('#agregarProductoModal').modal('hide');
+            } catch (error) {
+                console.error('Error al agregar el producto:', error);
+                alert('Hubo un error al agregar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+        // Función para cargar datos del producto en el formulario de edición
+        async function cargarDatosProductoParaEdicion(id) {
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/products/');
+                const productos = response.data;
+                const producto = productos.find(p => p._id === id);
+                
+                // Cargamos los datos del formulario
+                document.getElementById('editIdProducto').value = producto._id;
+                document.getElementById('editNombreProducto').value = producto.name;
+                document.getElementById('editDescripcionProducto').value = producto.description;
+                document.getElementById('editPrecioProducto').value = producto.price;
+                document.getElementById('editStockProducto').value = producto.stock;
+            } catch (error) {
+                console.error('Error al cargar datos del producto para edición:', error);
+                alert('Hubo un error al cargar datos del producto para edición. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+
+        // Función para editar un producto
+        async function editarProducto() {
+            try {
+                // Obtener datos del formulario
+                const idProducto = document.getElementById('editIdProducto').value;
+                const nombreProducto = document.getElementById('editNombreProducto').value;
+                const descripcionProducto = document.getElementById('editDescripcionProducto').value;
+                const precioProducto = document.getElementById('editPrecioProducto').value;
+                const stockProducto = document.getElementById('editStockProducto').value;
+
+                // Validar que los campos no estén vacíos
+                if (!nombreProducto || !descripcionProducto || !precioProducto || !stockProducto) {
+                    alert('Por favor, complete todos los campos.');
+                    return;
+                }
+
+                const response = await axios.put(`http://127.0.0.1:3000/products/${idProducto}`, {
+                    name: nombreProducto,
+                    description: descripcionProducto,
+                    price: precioProducto,
+                    stock: stockProducto
+                });
+
+                cargarTabla();
+
+                $('#editarProductoModal').modal('hide');
+            } catch (error) {
+                console.error('Error al editar el producto:', error);
+                alert('Hubo un error al editar el producto. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+
+    </script>
+
+
+
+</body>
+
+</html>
