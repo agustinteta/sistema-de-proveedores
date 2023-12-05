@@ -6,7 +6,8 @@
     "express-validator": "^7.0.1",
     "mongoose": "^8.0.2",
     "mongose": "^0.0.2-security",
-    "package": "^1.0.1"
+    "package": "^1.0.1",
+    "sweetalert2": "^11.6.13"
   },
   "name": "sistema-de-proveedores",
   "description": "Sistema de proveedores desarrollado para la cursada de Interfaces y Programacion visual",

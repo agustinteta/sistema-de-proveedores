@@ -11,6 +11,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
 </head>
 
 <body>
@@ -40,7 +41,7 @@
 		</div>
 	</nav>
 
-	<div class="container mt-4">
+	<div class="container mt-4" style="margin-bottom: 60px;">
 		<h2>Cargar Cliente</h2>
 
 		<form id="clienteForm">
@@ -96,14 +97,15 @@
 				</div>
 			</div>
 
-      <button type="submit" class="btn btn-primary" onclick="altaCliente()">Guardar Cliente</button>
+      <button type="button" class="btn btn-primary" onclick="altaCliente()">Guardar Cliente</button>
     </form>
-  </div>
 
-  <footer class="bg-dark text-light text-center py-3 fixed-bottom">
-	<p>&copy; UAA - Sistema de proveedores</p>
-  </footer>
-
+	<footer class="bg-dark text-light text-center py-1 fixed-bottom" style="position: fixed; bottom: 0.0; width: 100%;">
+		<p>&copy; UAA - Sistema de proveedores</p>
+	</footer>
+	</div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     async function altaCliente(){
       const idCliente = document.getElementById('idCliente').value;
@@ -117,8 +119,21 @@
       const cuit = document.getElementById('cuit').value;
       const diasHorarios = document.getElementById('diasHorarios').value;
       try {
-        const respuesta = await axios.post('cluster0.vhunetu.mongodb.net/clients', { idCliente: idCliente, nombreFantasia: nombreFantasia, nombre: nombre, apellido: apellido, email: email, whatsapp: whatsapp, direccion: direccion, fechaAlta: fechaAlta, cuit: cuit, diasHorarios: diasHorarios});
+        const respuesta = await axios.post('http://127.0.0.1:3000/clients', { idCliente: idCliente, nombreFantasia: nombreFantasia, nombre: nombre, apellido: apellido, email: email, whatsapp: whatsapp, direccion: direccion, fechaAlta: fechaAlta, cuit: cuit, diasHorarios: diasHorarios});
         const nuevoCliente = respuesta.data;
+		Swal.fire({
+			position: "center",
+			icon: "success",
+			title: "Your work has been saved",
+			showConfirmButton: true
+		}).then((result) => {
+		if (result.isConfirmed) {
+			Swal.fire("Saved!", "", "success");
+			window.location.href = "/clientes";
+		} else if (result.isDenied) {
+			Swal.fire("Changes are not saved", "", "info");
+		}
+		});
       } catch (error) {
         console.error(error);
       }

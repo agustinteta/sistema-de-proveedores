@@ -28,7 +28,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 app.get('/clientes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'lista.html'));
+  res.sendFile(path.join(__dirname, 'views', 'client_list.html'));
+});
+app.get('/nuevo_cliente', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'client_create.html'));
 });
 app.get('/productos', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'product_list.html'));
