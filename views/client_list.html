@@ -7,9 +7,7 @@
 	<title>Lista de Clientes</title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -69,6 +67,59 @@
 		</table>
 	</div>
 
+
+	 <!-- Modal para editar cliente -->
+	 <div class="modal fade" id="editarCliente" tabindex="-1" aria-labelledby="editarCliente"
+	 aria-hidden="true">
+	 <div class="modal-dialog">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <h5 class="modal-title" id="editarCliente">Editar Cliente</h5>
+				 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			 </div>
+			 <div class="modal-body">
+				 <!-- Formulario para editar cliente -->
+				 <form id="editarCliente">
+					 <div class="mb-3">
+						 <label for="editNombreFantasiaCliente" class="form-label">Nombre de Fantasía</label>
+						 <input type="text" class="form-control" id="editNombreFantasiaCliente" required>
+					 </div>
+					 <div class="mb-3">
+						 <label for="editNombreCliente" class="form-label">Nombre del cliente</label>
+						 <textarea class="form-control" id="editNombreCliente" required></textarea>
+					 </div>
+					 <div class="mb-3">
+						 <label for="editApellidoCliente" class="form-label">Apellido del cliente</label>
+						 <input type="text" class="form-control" id="editApellidoCliente" required>
+					 </div>
+					 <div class="mb-3">
+						 <label for="editEmailCliente" class="form-label">Email Cliente</label>
+						 <input type="text" class="form-control" id="editEmailCliente" required>
+					 </div>
+					 <div class="mb-3">
+						<label for="editWhatsappCliente" class="form-label">Whatsapp Cliente</label>
+						<input type="text" class="form-control" id="editWhatsappCliente" required>
+					</div>
+					<div class="mb-3">
+						<label for="editDireccionCliente" class="form-label">Direccion del  Cliente</label>
+						<input type="text" class="form-control" id="editDireccionCliente" required>
+					</div>
+					<div class="mb-3">
+						<label for="editCuitCliente" class="form-label">Cuit del cliente</label>
+						<input type="text" class="form-control" id="editCuitCliente" required>
+					</div>
+					 <input type="hidden" id="editIdCliente" name="editIdCliente">
+				 </form>
+			 </div>
+			 
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				 <button type="button" class="btn btn-primary" onclick="editarCliente()">Guardar Cambios</button>
+			 </div>
+		 </div>
+	 </div>
+ </div>
+
 	<!-- Pie de página -->
 	<footer class="bg-dark text-light text-center py-3 fixed-bottom">
 		<p>&copy; UAA - Sistema de proveedores</p>
@@ -77,7 +128,93 @@
 	<!-- Agrega Axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
 	
-</body>
+	<script>
+        window.onload = cargarTabla();
+
+		async function cargarTabla() {
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/clients/');
+                const clientes = response.data;
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                clientes.forEach(clientes => {
+                    const newRow = `
+                <tr>
+                    <td>${clientes.idCliente}</td>
+                    <td>${clientes.nombreFantasia}</td>
+					<td>${clientes.direccion}</td>
+                    <td>${clientes.saldo}</td>
+                    <td></td>
+                    <td>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCliente">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteClient('${clientes._id}')">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+                    tbody.innerHTML += newRow;
+                });
+            } catch (error) {
+                console.error('Error al obtener la lista de clientes:', error);
+                alert('Hubo un error al cargar la lista de clientes. Por favor, inténtalo de nuevo más tarde.');
+            }
+        };
+
+
+		 // Función para eliminar un cliente
+		 async function deleteClient(id) {
+            try {
+                const response = await axios.delete(`http://127.0.0.1:3000/clients/${id}`);
+
+                cargarTabla();
+            } catch (error) {
+                console.error('Error al eliminar el cliente:', error);
+                alert('Hubo un error al eliminar el cleinte. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+
+		// Función para editar un producto
+        async function editarCliente() {
+            try {
+                // Obtener datos del formulario
+				const idCliente = document.getElementById('editIdCliente').value;
+				const nombreFantasiaCliente = document.getElementById('editNombreFantasiaCliente').value;
+                const nombreCliente = document.getElementById('editNombreCliente').value;
+				const apellidoCliente = document.getElementById('editApellidoCliente').value;
+				const emailCliente = document.getElementById('editEmailCliente').value;
+				const whatsappCliente = document.getElementById('editWhatsappCliente').value;
+				const direccionCliente = document.getElementById('editDireccionCliente').value;
+				const cuitCliente = document.getElementById('editCuitCliente').value;               
+
+                const response = await axios.put(`http://127.0.0.1:3000/clients/${idCliente}`, {
+				
+					nombreFantasia: nombreFantasiaCliente,
+					nombre: nombreCliente,
+					apellido: apellidoCliente,
+					email: emailCliente,
+					whatsapp: whatsappCliente,
+					direccion: direccionCliente,
+					cuit: cuitCliente
+			
+                });
+
+                cargarTabla();
+
+                $('#editarCliente').modal('hide');
+            } catch (error) {
+                console.error('Error al editar el cliente:', error);
+                alert('Hubo un error al editar el cliente. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+
+		</script>
+	</body>
+
 
 </html>

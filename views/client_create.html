@@ -47,42 +47,42 @@
 		<form id="clienteForm">
 			<div class="form-row">
 				<div class="form-group col-md-4">
-					<label for="idCliente">ID Cliente</label>
-					<input type="text" class="form-control" id="idCliente" placeholder="ID Cliente" />
+					<label for="idCliente">ID Cliente (*)</label>
+					<input type="text" class="form-control" id="idCliente" placeholder="ID Cliente" required />
 				</div>
 				<div class="form-group col-md-4">
-					<label for="nombreFantasia">Nombre Fantasía</label>
-					<input type="text" class="form-control" id="nombreFantasia" placeholder="Nombre Fantasía" />
+					<label for="nombreFantasia">Nombre Fantasía (*)</label>
+					<input type="text" class="form-control" id="nombreFantasia" placeholder="Nombre Fantasía" required />
 				</div>
 				<div class="form-group col-md-4">
-					<label for="nombre">Nombre</label>
-					<input type="text" class="form-control" id="nombre" placeholder="Nombre" />
+					<label for="nombre">Nombre (*)</label>
+					<input type="text" class="form-control" id="nombre" placeholder="Nombre" required/>
 				</div>
 			</div>
 
 			<div class="form-row">
 				<div class="form-group col-md-4">
-					<label for="apellido">Apellido</label>
-					<input type="text" class="form-control" id="apellido" placeholder="Apellido" />
+					<label for="apellido">Apellido (*)</label>
+					<input type="text" class="form-control" id="apellido" placeholder="Apellido" required/>
 				</div>
 				<div class="form-group col-md-4">
 					<label for="email">Email</label>
 					<input type="email" class="form-control" id="email" placeholder="Email" />
 				</div>
 				<div class="form-group col-md-4">
-					<label for="whatsapp">Whatsapp</label>
-					<input type="text" class="form-control" id="whatsapp" placeholder="Whatsapp" />
+					<label for="whatsapp">Whatsapp (*)</label>
+					<input type="text" class="form-control" id="whatsapp" placeholder="Whatsapp" required/>
 				</div>
 			</div>
 
 			<div class="form-row">
 				<div class="form-group col-md-6">
-					<label for="direccion">Dirección</label>
-					<input type="text" class="form-control" id="direccion" placeholder="Dirección" />
+					<label for="direccion">Dirección (*)</label>
+					<input type="text" class="form-control" id="direccion" placeholder="Dirección" required/>
 				</div>
 				<div class="form-group col-md-6">
-					<label for="fechaAlta">Fecha de Alta</label>
-					<input type="date" class="form-control" id="fechaAlta" />
+					<label for="fechaAlta">Fecha de Alta (*)</label>
+					<input type="date" class="form-control" id="fechaAlta" required/>
 				</div>
 			</div>
 
@@ -92,15 +92,16 @@
 					<input type="text" class="form-control" id="cuit" placeholder="CUIT" />
 				</div>
 				<div class="form-group col-md-6">
-					<label for="diasHorarios">Días y Horarios</label>
-					<input type="text" class="form-control" id="diasHorarios" placeholder="Días y Horarios" />
+					<label for="diasHorarios">Días y Horarios de Atencion (*)</label>
+					<input type="text" class="form-control" id="diasHorarios" placeholder="Días y Horarios" required/>
 				</div>
 			</div>
+			<div><p>Todos los campos con (*) son obligatorios</p></div>
 
       <button type="button" class="btn btn-primary" onclick="altaCliente()">Guardar Cliente</button>
     </form>
 
-	<footer class="bg-dark text-light text-center py-1 fixed-bottom" style="position: fixed; bottom: 0.0; width: 100%;">
+	<footer class="bg-dark text-light text-center py-1 fixed-bottom">
 		<p>&copy; UAA - Sistema de proveedores</p>
 	</footer>
 	</div>
@@ -108,27 +109,36 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     async function altaCliente(){
-      const idCliente = document.getElementById('idCliente').value;
-      const nombreFantasia = document.getElementById('nombreFantasia').value;
-      const nombre = document.getElementById('nombre').value;
-      const apellido = document.getElementById('apellido').value;
-      const email = document.getElementById('email').value;
-      const whatsapp = document.getElementById('whatsapp').value;
-      const direccion = document.getElementById('direccion').value;
-      const fechaAlta = document.getElementById('fechaAlta').value;
-      const cuit = document.getElementById('cuit').value;
-      const diasHorarios = document.getElementById('diasHorarios').value;
+      const idCliente = document.getElementById('idCliente').value.trim();
+      const nombreFantasia = document.getElementById('nombreFantasia').value.trim();
+      const nombre = document.getElementById('nombre').value.trim();
+      const apellido = document.getElementById('apellido').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+      const direccion = document.getElementById('direccion').value.trim();
+      const fechaAlta = document.getElementById('fechaAlta').value.trim();
+      const cuit = document.getElementById('cuit').value.trim();
+      const diasHorarios = document.getElementById('diasHorarios').value.trim();
+	  if (!idCliente|| !nombreFantasia || !nombre || !apellido || !whatsapp || !direccion || !fechaAlta || !diasHorarios ) {
+			Swal.fire({
+				icon: "info",
+				title: "Oops...",
+				text: "Complete todos los campos!",
+			
+});
+                    return;
+                }
       try {
         const respuesta = await axios.post('http://127.0.0.1:3000/clients', { idCliente: idCliente, nombreFantasia: nombreFantasia, nombre: nombre, apellido: apellido, email: email, whatsapp: whatsapp, direccion: direccion, fechaAlta: fechaAlta, cuit: cuit, diasHorarios: diasHorarios});
         const nuevoCliente = respuesta.data;
 		Swal.fire({
 			position: "center",
 			icon: "success",
-			title: "Your work has been saved",
+			title: "Cliente guardado",
 			showConfirmButton: true
 		}).then((result) => {
 		if (result.isConfirmed) {
-			Swal.fire("Saved!", "", "success");
+			Swal.fire("Guardado", "", "Guardado");
 			window.location.href = "/clientes";
 		} else if (result.isDenied) {
 			Swal.fire("Changes are not saved", "", "info");

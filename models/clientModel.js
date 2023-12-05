@@ -9,9 +9,9 @@ const clientSchema = new mongoose.Schema({
   whatsapp: String,
   direccion: String,
   fechaAlta: Date,
-  cuit: Number,
+  cuit: String,
   diasHorarios: String,
-  completed: Boolean,
+  saldo: Number
 });
 
 const Client = mongoose.model('Client', clientSchema);
