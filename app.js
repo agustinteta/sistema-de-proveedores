@@ -27,8 +27,14 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
+app.get('/clientes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'lista.html'));
+});
 app.get('/productos', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'product_list.html'));
+});
+app.get('/nueva_venta', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'nueva_venta.html'));
 });
 
 app.use('/clients', clientRoutes);
