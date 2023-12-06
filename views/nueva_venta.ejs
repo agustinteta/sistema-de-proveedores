@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Nueva venta</title>
+        
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+        <style>
+        .form-container {
+            width: 45%;
+            float: left;
+        }
+
+        .lista-container {
+            width: 45%;
+            float: right;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        #lista-elementos {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #lista-elementos th,
+        #lista-elementos td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        #lista-elementos th {
+            background-color: #f2f2f2;
+        }
+        </style>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">Distribuidora</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/productos">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/clientes">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/nueva_venta">Nueva Venta</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-4 clearfix">
+            <div class="form-container">
+                <h4 class="mb-4">Seleccione producto y cantidad a agregar</h4>
+                
+                <form>
+                    <div class="mb-3 form-group">
+                        <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
+<select id="cliente" class="form-select" required>
+    <option value="" disabled selected>-- Seleccionar cliente --</option>
+    <% clientes.forEach(cliente => { %>
+        <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
+    <% }); %>
+</select>
+                   <!--     <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
+                        <select id="cliente" class="form-select" required>
+                            <option value="" disabled selected>-- Seleccionar cliente --</option>
+                            <option value="cliente1">Cliente 1</option>
+                            <option value="cliente2">Cliente 2</option>
+                            <option value="cliente3">Cliente 3</option>
+                            <option value="cliente4">Cliente 4</option>
+                            <option value="cliente5">Cliente 5</option>
+                        </select> -->
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="producto" style="margin-bottom: 12px;">Producto*</label><br>
+                        <select id="producto" class="form-select" required>
+                            <option value="" disabled selected>-- Seleccionar producto --</option>
+                            <option value="producto1">Producto 1</option>
+                            <option value="producto2">Producto 2</option>
+                            <option value="producto3">Producto 3</option>
+                            <option value="producto4">Producto 4</option>
+                            <option value="producto5">Producto 5</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="unidades" style="margin-bottom: 12px;">Unidades*</label><br>
+                        <input id="unidades" type="number" class="form-control" placeholder="Ingrese la cantidad de unidades..." required>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <label for="bonificacion" style="margin-bottom: 12px;">Bonificación de fábrica*</label>
+                        <input id="bonificacion" type="number" class="form-control" placeholder="0" required>
+                    </div>
+                    
+
+                    <div class="mb-3">
+                        <button type="button" id="btnAgregar" class="btn btn-primary" onclick="obtenerDatos()" style="background-color: blue; color: white;">Agregar</button>
+                        <button type="button" class="btn btn-outline-dark" style="color:black;">Guardar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="lista-container">
+                <h2 class="mb-4">Productos agregados</h2>
+                <table id="lista-elementos">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Unidades</th>
+                            <th>Bonificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Productos agregados -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer class="bg-dark text-light text-center py-1 fixed-bottom">
+            <p>&copy; UAA - Sistema de proveedores</p>
+        </footer>
+    
+        <!-- Agrega Axios CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="script_nuevas_ventas.js"></script>
+    </body>
+</html>
