@@ -78,32 +78,21 @@
                 <form>
                     <div class="mb-3 form-group">
                         <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
-<select id="cliente" class="form-select" required>
-    <option value="" disabled selected>-- Seleccionar cliente --</option>
-    <% clientes.forEach(cliente => { %>
-        <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
-    <% }); %>
-</select>
-                   <!--     <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
                         <select id="cliente" class="form-select" required>
                             <option value="" disabled selected>-- Seleccionar cliente --</option>
-                            <option value="cliente1">Cliente 1</option>
-                            <option value="cliente2">Cliente 2</option>
-                            <option value="cliente3">Cliente 3</option>
-                            <option value="cliente4">Cliente 4</option>
-                            <option value="cliente5">Cliente 5</option>
-                        </select> -->
+                            <% clientes.forEach(cliente => { %>
+                                <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
+                            <% }); %>
+                        </select>
                     </div>
 
                     <div class="mb-3 form-group">
                         <label for="producto" style="margin-bottom: 12px;">Producto*</label><br>
                         <select id="producto" class="form-select" required>
                             <option value="" disabled selected>-- Seleccionar producto --</option>
-                            <option value="producto1">Producto 1</option>
-                            <option value="producto2">Producto 2</option>
-                            <option value="producto3">Producto 3</option>
-                            <option value="producto4">Producto 4</option>
-                            <option value="producto5">Producto 5</option>
+                            <% productos.forEach(producto => { %>
+                                <option value="<%= producto._id %>"><%= producto.nombre %></option>
+                            <% }); %>
                         </select>
                     </div>
 
