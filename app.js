@@ -39,6 +39,9 @@ app.get('/productos', (req, res) => {
 app.get('/nueva_venta', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'nueva_venta.html'));
 });
+app.get('/ventas', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
+});
 
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
