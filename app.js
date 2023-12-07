@@ -65,6 +65,10 @@ app.get('/nueva_venta', async (req, res) => {
     }
 });
 
+app.get('/ventas', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
+});
+
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
 app.use('/sales', saleRoutes);

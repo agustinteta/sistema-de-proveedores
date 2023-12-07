@@ -353,14 +353,13 @@
                 const productos = [];
 
                 for (let i = 1; i < tabla.rows.length; i++) {
-                    const id = tabla.rows[i].cells[0].innerHTML;
-                    const nombre = tabla.rows[i].cells[0].innerHTML; // Reemplaza con el índice correcto de la celda para el nombre del producto
-                    const precio = parseFloat(tabla.rows[i].cells[3].innerHTML); // Reemplaza con el índice correcto de la celda para el precio
-                    const cantidad = parseInt(tabla.rows[i].cells[1].innerHTML); // Reemplaza con el índice correcto de la celda para la cantidad
-
-                    productos.push({ id, nombre, precio, cantidad });
+                    const name = tabla.rows[i].cells[0].innerHTML; // Reemplaza con el índice correcto de la celda para el nombre del producto
+                    const price = parseFloat(tabla.rows[i].cells[3].innerHTML); // Reemplaza con el índice correcto de la celda para el precio
+                    const qty = parseInt(tabla.rows[i].cells[1].innerHTML); // Reemplaza con el índice correcto de la celda para la cantidad
+                    
+                    productos.push({ name, price, qty });
                 }
-
+                console.log(productos);
                 return productos;
             }
 
