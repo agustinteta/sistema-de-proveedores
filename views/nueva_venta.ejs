@@ -256,13 +256,11 @@
                 var tabla = document.getElementById("lista-elementos");
                 var totalAcumulado = 0;
 
-                // Iterar a través de las filas, omitiendo la última fila de total
+                // Iterar a través de las filas
                 for (var i = 0; i < tabla.rows.length - 1; i++) {
                     var subtotal = parseFloat(tabla.rows[i+1].cells[4].innerHTML);
                     totalAcumulado += subtotal;
                 }
-
-                // Actualizar el elemento fuera de la tabla con el total acumulado
                 document.getElementById("total-acumulado").innerHTML = totalAcumulado.toFixed(2);
             }
 
@@ -327,12 +325,11 @@
                     total: totalAcumulado
                 };
 
-                // Realiza una solicitud HTTP POST a tu servidor para crear la venta
+                // Solicitud POST a tu servidor para crear la venta
                 axios.post('/sales', data)
                     .then(response => {
-                        console.log("Venta creada exitosamente:", response.data);
                         mostrarSweetAlert();
-                        // Opcionalmente, puedes reiniciar el formulario u realizar otras acciones después de la creación exitosa
+                        
                         resetearFormulario();
                     })
                     .catch(error => {
@@ -356,7 +353,7 @@
                 const productos = [];
 
                 for (let i = 1; i < tabla.rows.length; i++) {
-                    const id = tabla.rows[i].cells[0].innerHTML; // Suponiendo que la primera celda contiene el ID del producto
+                    const id = tabla.rows[i].cells[0].innerHTML;
                     const nombre = tabla.rows[i].cells[0].innerHTML; // Reemplaza con el índice correcto de la celda para el nombre del producto
                     const precio = parseFloat(tabla.rows[i].cells[3].innerHTML); // Reemplaza con el índice correcto de la celda para el precio
                     const cantidad = parseInt(tabla.rows[i].cells[1].innerHTML); // Reemplaza con el índice correcto de la celda para la cantidad
