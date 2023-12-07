@@ -50,19 +50,27 @@ app.get('/nueva_venta', async (req, res) => {
     const clientes = await Client.find({}, 'nombreFantasia');
     
     // Obtener los datos de los productos desde la base de datos
-    const productos = await Product.find({}, 'name');
+    const productoNombre = await Product.find({}, 'name');
+    const productoPrecio = await Product.find({}, 'price');
 
-    res.render('nueva_venta', { clientes, productos });
-  } catch (error) {
-    console.error(`Error al obtener los datos: ${error}`);
-    res.status(500).send('Error interno del servidor');
-  }
+    // Combina los datos en un solo objeto
+    const data = { clientes, productoNombre, productoPrecio };
+
+    // Pasa el objeto a res.render
+    res.render('nueva_venta', data);
+    } catch (error) {
+      console.error(`Error al obtener los datos: ${error}`);
+      res.status(500).send('Error interno del servidor');
+    }
 });
 
+<<<<<<< Updated upstream
 app.get('/ventas', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
 });
 
+=======
+>>>>>>> Stashed changes
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
 app.use('/sales', saleRoutes);
