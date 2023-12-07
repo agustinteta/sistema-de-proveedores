@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const clientRoutes = require('./routes/clientRoute');
 const productRoutes = require('./routes/productRoute');
+const saleRoutes = require('./routes/saleRoute');
 const Client = require('./models/clientModel');
 const Product = require('./models/productModel');
+const Sale = require('./models/saleModel');
 const app = express();
 const port = 3000;
 
@@ -56,14 +58,14 @@ app.get('/nueva_venta', async (req, res) => {
     res.status(500).send('Error interno del servidor');
   }
 });
+
 app.get('/ventas', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
 });
 
-
-
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
+app.use('/sales', saleRoutes);
 
 // Eventos de conexión y error de MongoDB
 mongoose.connection.on('connected', () => {
