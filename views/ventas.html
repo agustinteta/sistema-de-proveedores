@@ -41,8 +41,8 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-between">
             <h2>Listado de Ventas</h2>
-            <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal"
-                data-bs-target="#agregarProductoModal">
+            <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal"
+                data-bs-target="#agregarVentaModal" onclick="irANuevaVenta()">
                 Nueva Venta
             </button>
         </div>
@@ -56,7 +56,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Carga dinamica de los productos -->
+                <!-- Carga dinamica de las ventas -->
             </tbody>
         </table>
     </div>
@@ -72,9 +72,9 @@
                 </div>
                 <div class="modal-body">
                     <!-- Informe -->
-                    <label for="cliente" class="form-label">Cliente: Mauro</label>
+                    <label class="form-label" id="detalleNombreCliente">Cliente: </label>
                     <table style="border-collapse: collapse;  width: 100%;">
-                        <caption>Importe Total: $3500</caption>
+                        <caption id="detalleImporte"></caption>
                         <thead>
                           <tr>
                             <th style="padding: 8px; text-align: center; border: 1px solid #000000;">Producto</th>
@@ -82,19 +82,9 @@
                             <th style="padding: 8px; text-align: center; border: 1px solid #000000;">Precio</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">Gaseosa</td>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">5</td>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">1000</td>
-                          </tr>
-                          <tr>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">Comida</td>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">10</td>
-                            <td style="padding: 8px; text-align: center; border: 1px solid #000000;">2500</td>
-                          </tr>
+                        <tbody id="body-products">
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>
@@ -112,76 +102,91 @@
     <script>
         window.onload = cargarTabla();
 
+        async function obtenerNombreCliente(id){
+            id = parseInt(id);
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/clients/');
+                const clientes = response.data;
+                var nombreCliente = "";
+                clientes.forEach(cliente => {
+                    if(cliente.idCliente === id)
+                        nombreCliente = cliente.nombre;
+                });
+                
+                return nombreCliente;
+                
+            } catch (error) {
+                console.error('Error al cargar datos del cliente', error);
+                alert('Hubo un error al cargar datos del cliente. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
         // Funcion para cargar la tabla con las ventas de la BDD
         async function cargarTabla() {
             try {
-                /*
-                // Obtengo los datos de la colección 'sales'
-                const responseSales = await axios.get('http://127.0.0.1:3000/sales/');
-                const ventas = responseSales.data;
-
-                // Obtengo los datos de la colección 'products'
-                const responseProducts = await axios.get('http://127.0.0.1:3000/products/');
-                const productos = responseProducts.data;
-
+                const response = await axios.get('http://127.0.0.1:3000/sales/');
+                const ventas = response.data;
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = '';
 
-                ventas.forEach(venta => {
+                for (const venta of ventas) {
+                    // Esperar a obtener el nombre del cliente antes de agregar la fila a la tabla
+                    const nombreCliente = await obtenerNombreCliente(venta.idCliente);
                     const newRow = `
-                    <tr>
-                        <td>${venta.client}</td>
-                        <td>${venta.import}</td>
-                        <td>
-                            <ul>
-                                ${venta.products.map(producto => `
-                                    <li>
-                                    <p>Nombre: ${producto.nombre}</p>
-                                    <p>Cantidad: ${producto.precio}</p>
-                                    <p>Precio: ${producto.cantidad}</p>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>${nombreCliente}</td>
+                            <td>${venta.productos.length}</td>
+                            <td>${venta.total}</td>
+                            <td>
+                                <button class="btn btn-primary" onclick="verDetalle('${nombreCliente}', '${venta._id}')" 
+                                data-bs-toggle="modal" data-bs-target="#verDetalleModal">Detalle</button>
+                            </td>
+                        </tr>
                     `;
                     tbody.innerHTML += newRow;
-                });*/
-
-                const tbody = document.querySelector('tbody');
-                tbody.innerHTML = '';
-
-                    const newRow = `
-                    <tr>
-                        <td>Mauro</td>
-                        <td>15</td>
-                        <td>$3500</td>
-                        <td>
-                            <button class="btn btn-primary" onclick="verDetalle(1)" 
-                            data-bs-toggle="modal" data-bs-target="#verDetalleModal">Detalle</button>
-                        </td>
-                    </tr>
-                    `;
-                    tbody.innerHTML += newRow;
-
-                    const newRow2 = `
-                    <tr>
-                        <td>Carlitos</td>
-                        <td>6</td>
-                        <td>$1200</td>
-                        <td>
-                            <button class="btn btn-primary" onclick="verDetalle(1)" 
-                            data-bs-toggle="modal" data-bs-target="#verDetalleModal">Detalle</button>
-                        </td>
-                    </tr>
-                    `;
-                    tbody.innerHTML += newRow2;
-                
+                }
             } catch (error) {
                 console.error('Error al obtener la lista de ventas:', error);
                 alert('Hubo un error al cargar la lista de ventas. Por favor, inténtalo de nuevo más tarde.');
             }
         };
+
+        // Función para cargar datos del modal de detalle
+        async function verDetalle(nombreCliente, idVenta) {
+            const detalleNombreCliente = document.getElementById('detalleNombreCliente');
+            detalleNombreCliente.textContent = 'Cliente: ' + nombreCliente;
+            var importeTotal = 0;
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/sales/');
+                const ventas = response.data;
+                ventas.forEach(venta => {
+                    if(toString(venta._id) === toString(idVenta)){
+                        const tbody = document.getElementById('body-products');
+                        tbody.innerHTML = '';
+                        venta.productos.forEach(producto => {
+                            importeTotal += producto.qty * producto.price;
+                            const newRow = `
+                                <tr>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #000000;">${producto.name}</td>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #000000;">${producto.qty}</td>
+                                    <td style="padding: 8px; text-align: center; border: 1px solid #000000;">${producto.price}</td>
+                                </tr>
+                            `;
+                            tbody.insertAdjacentHTML('beforeend', newRow);
+                        });
+                    }
+                })
+                const detalleImporte = document.getElementById('detalleImporte');
+                detalleImporte.textContent = 'Importe total: ' + importeTotal;
+            } catch (error) {
+                console.error('Error al mostrar los detalles de la venta:', error);
+                alert('Hubo un error al mostrar los detalles de la venta. Por favor, inténtalo de nuevo más tarde.');
+            }
+        };
+
+        function irANuevaVenta(){
+            window.location.href = '/nueva_venta';
+        }
     </script>
 
 </body>
