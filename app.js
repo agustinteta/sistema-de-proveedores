@@ -56,6 +56,9 @@ app.get('/nueva_venta', async (req, res) => {
     res.status(500).send('Error interno del servidor');
   }
 });
+app.get('/ventas', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
+});
 
 
 
