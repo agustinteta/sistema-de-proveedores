@@ -3,8 +3,13 @@ const mongoose = require('mongoose');
 const path = require('path');
 const clientRoutes = require('./routes/clientRoute');
 const productRoutes = require('./routes/productRoute');
+const Client = require('./models/clientModel');
+const Product = require('./models/productModel');
 const app = express();
 const port = 3000;
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Configurar Express para servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,12 +41,26 @@ app.get('/nuevo_cliente', (req, res) => {
 app.get('/productos', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'product_list.html'));
 });
-app.get('/nueva_venta', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'nueva_venta.html'));
+
+app.get('/nueva_venta', async (req, res) => {
+  try {
+    // Obtener los datos de los clientes desde la base de datos
+    const clientes = await Client.find({}, 'nombreFantasia');
+    
+    // Obtener los datos de los productos desde la base de datos
+    const productos = await Product.find({}, 'name');
+
+    res.render('nueva_venta', { clientes, productos });
+  } catch (error) {
+    console.error(`Error al obtener los datos: ${error}`);
+    res.status(500).send('Error interno del servidor');
+  }
 });
 app.get('/ventas', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
 });
+
+
 
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
