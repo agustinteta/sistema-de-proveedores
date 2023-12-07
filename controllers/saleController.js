@@ -1,4 +1,5 @@
 const Sale = require('../models/saleModel');
+const mongoose = require('mongoose');
 
 const getSales = async (req, res) => {
     try {
@@ -12,7 +13,11 @@ const getSales = async (req, res) => {
 
 const createSale = async (req, res) => {
     try {
-        const newSale = new Sale(req.body);
+//        const newSale = new Sale(req.body);
+const newSale = new Sale({
+    _id: new mongoose.Types.ObjectId(),
+    ...req.body
+  });
         const savedSale = await newSale.save();
         res.json(savedSale);
     } catch (error) {

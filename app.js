@@ -47,14 +47,15 @@ app.get('/productos', (req, res) => {
 app.get('/nueva_venta', async (req, res) => {
   try {
     // Obtener los datos de los clientes desde la base de datos
-    const clientes = await Client.find({}, 'nombreFantasia');
+    const clienteNombreFantasia = await Client.find({}, 'nombreFantasia');
+    const clienteId = await Client.find({}, 'idCliente');
     
     // Obtener los datos de los productos desde la base de datos
     const productoNombre = await Product.find({}, 'name');
     const productoPrecio = await Product.find({}, 'price');
 
     // Combina los datos en un solo objeto
-    const data = { clientes, productoNombre, productoPrecio };
+    const data = { clienteNombreFantasia, clienteId, productoNombre, productoPrecio };
 
     // Pasa el objeto a res.render
     res.render('nueva_venta', data);
@@ -64,13 +65,6 @@ app.get('/nueva_venta', async (req, res) => {
     }
 });
 
-<<<<<<< Updated upstream
-app.get('/ventas', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
-});
-
-=======
->>>>>>> Stashed changes
 app.use('/clients', clientRoutes);
 app.use('/products', productRoutes);
 app.use('/sales', saleRoutes);
