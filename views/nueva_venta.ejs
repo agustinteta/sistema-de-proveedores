@@ -80,7 +80,7 @@
                         <label for="producto" style="margin-bottom: 12px;">Producto*</label><br>
                         <select id="producto" class="form-select" required>
                             <option value="" disabled selected>-- Seleccionar producto --</option>
-                            <% productos.forEach(producto => { %>
+                            <% productoNombre.forEach(producto => { %>
                                 <option value="<%= producto._id %>"><%= producto.name %></option>
                             <% }); %>
                         </select>
@@ -130,19 +130,25 @@
 
             <div class="lista-container">
                 <h2 class="mb-4">Productos agregados</h2>
-                <table id="lista-elementos">
+                <table id="lista-elementos" class="table">
                     <thead>
                         <tr>
                             <th>Producto</th>
                             <th>Unidades</th>
                             <th>Bonificación</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Productos agregados -->
+                        <!-- Filas de productos agregados -->
                     </tbody>
                 </table>
-            </div>
+                
+                <div id="total-container" class="mt-3" style="text-align: right;">
+                    <strong>Total Acumulado: $<span id="total-acumulado">0.00</span></strong>
+                </div>
         </div>
 
         <footer class="bg-dark text-light text-center py-1 fixed-bottom">
@@ -154,65 +160,105 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
         <script>
-            function obtenerDatos(){
+            function obtenerDatos() {
                 var resultados;
+                // Lee los valores ingresos en los distintos campos
                 const producto = document.getElementById("producto").value;
                 const unidades = document.getElementById("unidades").value;
                 const bonificacion = document.getElementById("bonificacion").value;
             
+                // Si alguno está vacío, emite una alerta
                 if (producto === "" || unidades === "" || bonificacion === "") {
                     alert("Por favor, complete todos los campos.");
                     return null;
                 }
                 
+                // Guarda los campos ingresados en un arreglo y los retorna
                 var resultados = [producto, unidades, bonificacion];
+
                 return resultados;
             }
             
             function agregarEvento() {
                 var resultados = obtenerDatos();
-                
+
                 if (resultados !== null) {
+                    // Insertar la fila después de actualizar el total acumulado
                     insertarFila(resultados);
+                    // Actualizar el total acumulado antes de insertar la fila
+                    actualizarTotalAcumulado();
+
+
                 }
             }
-            
-    function insertarFila(datos) {
-        var tabla = document.getElementById("lista-elementos");
-        var fila = tabla.insertRow(-1);
 
-        for (var i = 0; i < datos.length; i++) {
-            var celda = fila.insertCell(i);
+            function insertarFila(datos) {
+                var tabla = document.getElementById("lista-elementos");
+                var fila = tabla.insertRow(-1);
+                var precioUnitario = obtenerPrecioProducto(datos[0]);
 
-            if (i === 0) {
-                var productoId = datos[i];
-                var productoSeleccionado = obtenerNombreProducto(productoId);
-                celda.innerHTML = productoSeleccionado;
-            } else {
-                celda.innerHTML = datos[i];
+                // Insertar celdas con la información requerida
+                insertarCelda(fila, obtenerNombreProducto(datos[0])); // Producto
+                insertarCelda(fila, datos[1]); // Unidades
+                insertarCelda(fila, datos[2]); // Bonificación
+                insertarCelda(fila, precioUnitario); // Precio unitario
+                insertarCelda(fila, obtenerSubtotal(precioUnitario, datos[1])); // Subtotal
+
+                // Acciones (botón "Eliminar")
+                var celdaBotones = fila.insertCell(5);
+                celdaBotones.className = "text-center";
+                var btnEliminar = document.createElement("button");
+                btnEliminar.innerText = "Eliminar";
+                btnEliminar.className = "btn btn-danger btn-sm";
+
+                btnEliminar.addEventListener("click", function () {
+                    eliminarFila(fila);
+                });
+
+                celdaBotones.appendChild(btnEliminar);
+
+                // Actualizar el total acumulado
+                actualizarTotalAcumulado();
             }
-        }
 
-        // Agrega botón "Eliminar" en la misma columna que el botón "Agregar"
-        var celdaBotones = fila.insertCell(datos.length);
-        celdaBotones.className = "text-center";
-        var btnEliminar = document.createElement("button");
-        btnEliminar.innerText = "Eliminar";
-        btnEliminar.className = "btn btn-danger btn-sm";
-        btnEliminar.addEventListener("click", function() {
-            eliminarFila(fila);
-        });
-        celdaBotones.appendChild(btnEliminar);
-    }
+            function insertarCelda(fila, contenido) {
+                var celda = fila.insertCell(fila.cells.length);
+                celda.innerHTML = contenido;
+            }
 
-    function eliminarFila(fila) {
-        var index = fila.rowIndex;
-        document.getElementById("lista-elementos").deleteRow(index);
-    }
+            function eliminarFila(fila) {
+                var tabla = document.getElementById("lista-elementos");
+                var index = fila.rowIndex;
+                var subtotal = parseFloat(tabla.rows[index].cells[4].innerHTML);
+
+                // Eliminar la fila
+                tabla.deleteRow(index);
+
+                // Actualizar el total acumulado restando el subtotal eliminado
+                actualizarTotalAcumulado();
+            }
+
+            function actualizarTotalAcumulado() {
+                var tabla = document.getElementById("lista-elementos");
+                var totalAcumulado = 0;
+
+                // Iterar a través de las filas, omitiendo la última fila de total
+                for (var i = 1; i < tabla.rows.length - 1; i++) {
+                    var subtotal = parseFloat(tabla.rows[i].cells[4].innerHTML);
+                    totalAcumulado += subtotal;
+                }
+
+                // Actualizar el elemento fuera de la tabla con el total acumulado
+                document.getElementById("total-acumulado").innerHTML = totalAcumulado.toFixed(2);
+            }
+
+            function obtenerSubtotal(precioUnitario, unidades) {
+                return precioUnitario * unidades;
+            }
 
             function obtenerNombreProducto(id) {
                 var nombreProducto = "";
-                <% productos.forEach(producto => { %>
+                <% productoNombre.forEach(producto => { %>
                     if("<%= producto._id %>" === id) {
                         nombreProducto = "<%= producto.name %>";
                     }
@@ -220,6 +266,16 @@
                 return nombreProducto;
             }
             
+            function obtenerPrecioProducto(id) {
+                var precioProducto = "";
+                <% productoPrecio.forEach(producto => { %>
+                    if("<%= producto._id %>" === id) {
+                        precioProducto = "<%= producto.price %>";
+                    }
+                <% }); %>
+                return precioProducto;
+            }
+
             var btnAgregar = document.getElementById("btnAgregar");
             btnAgregar.removeEventListener("click", agregarEvento);
             btnAgregar.addEventListener("click", agregarEvento);
