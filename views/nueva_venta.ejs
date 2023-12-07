@@ -77,21 +77,11 @@
                 
                 <form>
                     <div class="mb-3 form-group">
-                        <label for="cliente" style="margin-bottom: 12px;">Cliente*</label>
-                        <select id="cliente" class="form-select" required>
-                            <option value="" disabled selected>-- Seleccionar cliente --</option>
-                            <% clientes.forEach(cliente => { %>
-                                <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
-                            <% }); %>
-                        </select>
-                    </div>
-
-                    <div class="mb-3 form-group">
                         <label for="producto" style="margin-bottom: 12px;">Producto*</label><br>
                         <select id="producto" class="form-select" required>
                             <option value="" disabled selected>-- Seleccionar producto --</option>
                             <% productos.forEach(producto => { %>
-                                <option value="<%= producto._id %>"><%= producto.nombre %></option>
+                                <option value="<%= producto._id %>"><%= producto.name %></option>
                             <% }); %>
                         </select>
                     </div>
@@ -109,9 +99,33 @@
 
                     <div class="mb-3">
                         <button type="button" id="btnAgregar" class="btn btn-primary" onclick="obtenerDatos()" style="background-color: blue; color: white;">Agregar</button>
-                        <button type="button" class="btn btn-outline-dark" style="color:black;">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark" style="color:black;" data-bs-toggle="modal" data-bs-target="#modalCliente">Guardar</button>
                     </div>
                 </form>
+            </div>
+
+            <div class="modal fade" id="modalCliente" tabindex="-1" aria-labelledby="modalClienteLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalClienteLabel">Seleccionar Cliente</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="clienteModal" style="margin-bottom: 12px;">Cliente*</label>
+                            <select id="clienteModal" class="form-select" required>
+                                <option value="" disabled selected>-- Seleccionar cliente --</option>
+                                <% clientes.forEach(cliente => { %>
+                                    <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="guardarConCliente()">Guardar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="lista-container">
@@ -138,6 +152,83 @@
         <!-- Agrega Axios CDN -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="script_nuevas_ventas.js"></script>
+
+        <script>
+            function obtenerDatos(){
+                var resultados;
+                const producto = document.getElementById("producto").value;
+                const unidades = document.getElementById("unidades").value;
+                const bonificacion = document.getElementById("bonificacion").value;
+            
+                if (producto === "" || unidades === "" || bonificacion === "") {
+                    alert("Por favor, complete todos los campos.");
+                    return null;
+                }
+                
+                var resultados = [producto, unidades, bonificacion];
+                return resultados;
+            }
+            
+            function agregarEvento() {
+                var resultados = obtenerDatos();
+                
+                if (resultados !== null) {
+                    insertarFila(resultados);
+                }
+            }
+            
+    function insertarFila(datos) {
+        var tabla = document.getElementById("lista-elementos");
+        var fila = tabla.insertRow(-1);
+
+        for (var i = 0; i < datos.length; i++) {
+            var celda = fila.insertCell(i);
+
+            if (i === 0) {
+                var productoId = datos[i];
+                var productoSeleccionado = obtenerNombreProducto(productoId);
+                celda.innerHTML = productoSeleccionado;
+            } else {
+                celda.innerHTML = datos[i];
+            }
+        }
+
+        // Agrega botón "Eliminar" en la misma columna que el botón "Agregar"
+        var celdaBotones = fila.insertCell(datos.length);
+        celdaBotones.className = "text-center";
+        var btnEliminar = document.createElement("button");
+        btnEliminar.innerText = "Eliminar";
+        btnEliminar.className = "btn btn-danger btn-sm";
+        btnEliminar.addEventListener("click", function() {
+            eliminarFila(fila);
+        });
+        celdaBotones.appendChild(btnEliminar);
+    }
+
+    function eliminarFila(fila) {
+        var index = fila.rowIndex;
+        document.getElementById("lista-elementos").deleteRow(index);
+    }
+
+            function obtenerNombreProducto(id) {
+                var nombreProducto = "";
+                <% productos.forEach(producto => { %>
+                    if("<%= producto._id %>" === id) {
+                        nombreProducto = "<%= producto.name %>";
+                    }
+                <% }); %>
+                return nombreProducto;
+            }
+            
+            var btnAgregar = document.getElementById("btnAgregar");
+            btnAgregar.removeEventListener("click", agregarEvento);
+            btnAgregar.addEventListener("click", agregarEvento);
+        </script>
+
+        <script>
+            function guardarConCliente() {
+                $('#modalCliente').modal('hide');
+            }
+        </script>
     </body>
 </html>
