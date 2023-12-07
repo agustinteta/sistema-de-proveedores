@@ -12,31 +12,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
 </head>
 
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0; background-image: url('fondo.png'); background-size: cover; ">
     <h1 class="bg-dark text-white p-4 text-center">Distribuidora</h1>
 
     <div style="display: flex; justify-content: center; align-items: center;">
-        <img src="https://lh3.googleusercontent.com/pw/ADCreHc_BSX2jSyMWi4OEM_gDgH2o6MI7hfOCh2Ypnrr8w5K4XPLGz-19F2aIe2XXi5y3uVUV3rD1KNVeTtajK-_XJ4MaqI-2JnqiYYM-tU9bVDVEfsz3EWD3VncS0eE_xy0tfoEQgPsfR0-nln4_RmovRQdInG_YjpCvsjV6OpxX3NQ3lsdeMqDdxiLFfFlsl8DphuT78Rgnyv32coP4ybM2SuuniV8sK_iEbotTMEF4sW2v3b5XB_uP_7beyIQAFAZbp1yroLZcn180FBZUlFRqdjZYfcVwZvNe6SEStRz8B2ZFBfXcNw6r0THkseNOFTTiYHrzfS3Zs8NwoW3hDz4uv01b74X7lv5XwWpWiOi22zpigighjZ-orq_BQKtUZeEkutm_37U99EMFfV3eivYI2-r7goeW8aYExNxpi6mM2cxwgJeRpBEqI6k9omJmmdYoaBkh4YZwE7qphuIIOfgBOMpwkzepbHMmRAId128L5Iu4vMQz9DGKK30Lp_ExpAxtJ5YElGS6lWUU2-uSmKDADx5RhRWTvQvBfBDY3YEMzraA0cFLJamJrfDHchrYsTKq2ILrNbWejmOl88n7BzjkbWcjMqNxElJOnkvA_VTZIEOrk89TKmbb41h7yyKqDPrnF-xtN0IDmUTc1lTr2pcLI2fPwpQggzY-TuXHsm3QIcDAU4M4mzU7GHRoAORHjWyEAfJmKGqLpPuaHNXwgQfBg_iJSGaN1HP3yi_Poa7fN7tUBLBGa-AML_iqLTUkWFA7Q2HOllFbq1_JngmI2UkA98_lyz018VibMlzzH7AK-Z5a7oBc-yeiFv_RXI7Zf6A13GbYanT4L4CY6XEVDSPi_icEwbqyNQTzNzmcQDKN_zpGkJfML4sN8GmhozVygl9UQ=w500-h418-s-no-gm?authuser=0" alt="Logo" style="width: 220px; height: 200px;">
-      </div>
+        <img src="/logo.png" alt="Logo" style="width: 240px; height: 200px;">
+    </div>
     
     <div class="d-flex justify-content-center align-items-center">
         <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-center align-items-center border-0">
+            <li class="list-group-item d-flex justify-content-center align-items-center border-0" style="background: transparent;">
                 <button class="btn btn-primary btn-lg m-2" onclick="irANuevaVenta()" style="width: 150px;">Nueva Venta</button>
             </li>
-            <li class="list-group-item d-flex justify-content-center align-items-center border-0">
+            <li class="list-group-item d-flex justify-content-center align-items-center border-0" style="background: transparent;">
                 <button class="btn btn-success btn-lg m-2" onclick="irAClientes()" style="width: 150px;">Clientes</button>
             </li>
-            <li class="list-group-item d-flex justify-content-center align-items-center border-0">
-                <button class="btn btn-warning btn-lg m-2" onclick="irAProductos()" style="width: 150px;">Productos</button>
+            <li class="list-group-item d-flex justify-content-center align-items-center border-0" style="background: transparent;">
+                <button class="btn btn-warning btn-lg m-2" onclick="irAProductos()" style="width: 150px; color: white;">Productos</button>
             </li>
-            <li class="list-group-item d-flex justify-content-center align-items-center border-0">
+            <li class="list-group-item d-flex justify-content-center align-items-center border-0" style="background: transparent;">
                 <button class="btn btn-lg m-2" onclick="irAMisVentas()" style="width: 150px; background-color: purple; color: white;">Mis Ventas</button>
             </li>
         </ul>
     </div>
 
-    <footer class="bg-dark text-light text-center py-3 fixed-bottom">
+    <footer class="bg-dark text-light text-center py-3" style="flex-shrink: 0;">
         <p>&copy; UAA - Sistema de proveedores</p>
     </footer>
 
