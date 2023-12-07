@@ -116,7 +116,7 @@
                             <select id="clienteModal" class="form-select" required>
                                 <option value="" disabled selected>-- Seleccionar cliente --</option>
                                 <% clientes.forEach(cliente => { %>
-                                    <option value="<%= cliente._id %>"><%= cliente.nombre %></option>
+                                    <option value="<%= cliente._id %>"><%= cliente.nombreFantasia %></option>
                                 <% }); %>
                             </select>
                         </div>

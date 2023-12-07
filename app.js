@@ -45,7 +45,7 @@ app.get('/productos', (req, res) => {
 app.get('/nueva_venta', async (req, res) => {
   try {
     // Obtener los datos de los clientes desde la base de datos
-    const clientes = await Client.find({}, 'nombre');
+    const clientes = await Client.find({}, 'nombreFantasia');
     
     // Obtener los datos de los productos desde la base de datos
     const productos = await Product.find({}, 'name');
