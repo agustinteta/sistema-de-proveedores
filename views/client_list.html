@@ -54,14 +54,7 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>1</td>
-					<td>Nombre Fantasía 1</td>
-					<td>Dirección 1</td>
-					<td>$100.00</td>
-					<td>
-						<a href="#" class="btn btn-warning">Modificar</a>
-						<a href="#" class="btn btn-danger">Eliminar</a>
-					</td>
+					
 				</tr>
 			</tbody>
 		</table>
@@ -108,6 +101,7 @@
 						<label for="editCuitCliente" class="form-label">Cuit del cliente</label>
 						<input type="text" class="form-control" id="editCuitCliente" required>
 					</div>
+					<input type="hidden" id="editSaldoCliinte" name="editSaldoCliinte">
 					 <input type="hidden" id="editIdCliente" name="editIdCliente">
 				 </form>
 			 </div>
@@ -131,6 +125,7 @@
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	
 	<script>
         window.onload = cargarTabla();
@@ -149,8 +144,8 @@
                     <td>${clientes.nombreFantasia}</td>
 					<td>${clientes.direccion}</td>
                     <td>${clientes.saldo}</td>
-                    <td></td>
                     <td>
+						<button class="btn btn-primary" onclick="cargarDatosClienteParaEdicion('${clientes._id}')" 
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCliente">Editar</button>
                         <button class="btn btn-danger" onclick="deleteClient('${clientes._id}')">Eliminar</button>
                     </td>
@@ -166,19 +161,67 @@
 
 
 		 // Función para eliminar un cliente
-		 async function deleteClient(id) {
-            try {
-                const response = await axios.delete(`http://127.0.0.1:3000/clients/${id}`);
 
-                cargarTabla();
+        async function deleteClient(id) {
+            try {
+                const result = await Swal.fire({
+                    title: "Estás seguro que deseas eliminar?",
+                    text: "La acción no será reversible",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, eliminar!"
+                });
+
+                if (result.isConfirmed) {
+                    // Confirmó la eliminación
+                    const response = await axios.delete(`http://127.0.0.1:3000/clients/${id}`);
+                    Swal.fire({
+                        title: "Eliminado!",
+                        text: "Tu cliente ha sido eliminado.",
+                        icon: "success"
+                    });
+                    cargarTabla();
+                } else {
+                    // Canceló la eliminación
+                    Swal.fire("Cancelado", "Tu cliente no fue eliminado.", "info");
+                }
             } catch (error) {
                 console.error('Error al eliminar el cliente:', error);
-                alert('Hubo un error al eliminar el cleinte. Por favor, inténtalo de nuevo más tarde.');
+                Swal.fire({
+                    title: "Error",
+                    text: "Hubo un error al eliminar el cliente. Por favor, inténtalo de nuevo más tarde.",
+                    icon: "error"
+                });
+            }
+        }
+
+		async function cargarDatosClienteParaEdicion(id) {
+            try {
+                const response = await axios.get('http://127.0.0.1:3000/clients/');
+                const clients = response.data;
+                const clientes = clients.find(p => p._id === id);
+                
+                // Cargamos los datos del formulario
+                document.getElementById('editIdCliente').value = clientes._id;
+                document.getElementById('editNombreFantasiaCliente').value = clientes.nombreFantasia;
+				document.getElementById('editNombreCliente').value = clientes.nombre;
+				document.getElementById('editApellidoCliente').value = clientes.apellido;
+				document.getElementById('editEmailCliente').value = clientes.email;
+				document.getElementById('editWhatsappCliente').value = clientes.whatsapp;
+                document.getElementById('editDireccionCliente').value = clientes.direccion;
+				document.getElementById('editCuitCliente').value = clientes.cuit;
+           } catch (error) {
+                console.error('Error al cargar datos del clientes para edición:', error);
+                alert('Hubo un error al cargar datos del clientes para edición. Por favor, inténtalo de nuevo más tarde.');
             }
         }
 
 
-		// Función para editar un producto
+
+
+		// Función para editar un cliente
         async function editarCliente() {
             try {
                 // Obtener datos del formulario
@@ -190,7 +233,7 @@
 				const whatsappCliente = document.getElementById('editWhatsappCliente').value;
 				const direccionCliente = document.getElementById('editDireccionCliente').value;
 				const cuitCliente = document.getElementById('editCuitCliente').value;               
-
+								    
                 const response = await axios.put(`http://127.0.0.1:3000/clients/${idCliente}`, {
 				
 					nombreFantasia: nombreFantasiaCliente,
@@ -199,13 +242,13 @@
 					email: emailCliente,
 					whatsapp: whatsappCliente,
 					direccion: direccionCliente,
-					cuit: cuitCliente
-			
+					cuit: cuitCliente,
+						
                 });
 
                 cargarTabla();
-
-                $('#editarCliente').modal('hide');
+				location.reload();
+                //$('#editarCliente').modal('hide');
             } catch (error) {
                 console.error('Error al editar el cliente:', error);
                 alert('Hubo un error al editar el cliente. Por favor, inténtalo de nuevo más tarde.');
